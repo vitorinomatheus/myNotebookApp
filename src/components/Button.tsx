@@ -10,8 +10,9 @@ export const Button = ({children, mode, style, ...props}: Props) => {
             style={[styles.button, style]}
             labelStyle={styles.text}
             mode = {mode || 'text'}
+            onPress = {props.onPress}
         >
-
+            
             {children}
 
         </PaperButton>

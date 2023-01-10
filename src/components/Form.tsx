@@ -1,10 +1,14 @@
-import { useRef, useState } from "react";
-import { Keyboard, ReturnKeyTypeOptions, TextInput, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { TextInput, View } from "react-native";
 import { Field, FormProps } from "../types";
 import { Button } from "./Button";
 import * as Paper from "react-native-paper";
 
-export const Form = (formProps: FormProps) => {
+type ChildProp = {
+    children: React.ReactNode
+}
+
+export const Form = ({children, ...formProps}: FormProps & ChildProp) => {
 
     const [formData, setFormData] = useState({});
 
@@ -14,16 +18,19 @@ export const Form = (formProps: FormProps) => {
         formProps.submitMethod(formData)
     }
 
-    const focusNextField = (fieldIndex: number) => {
+    const focusNextField = (field: Field) => {
+        const fieldIndex = formProps.fields.indexOf(field);
         if(fieldIndex != formProps.fields.length - 1)
             inputs.current[fieldIndex + 1].focus();
     }
 
-    const defineReturnType = (fieldIndex: number) => {
+    const defineReturnType = (field: Field) => {
+        const fieldIndex = formProps.fields.indexOf(field);
         return fieldIndex == (formProps.fields.length - 1) ? 'done' : 'next';
     }
 
-    const defineBlurSubmit = (fieldIndex: number) => {
+    const defineBlurSubmit = (field: Field) => {
+        const fieldIndex = formProps.fields.indexOf(field);
         return fieldIndex == (formProps.fields.length - 1);
     }
 
@@ -31,7 +38,7 @@ export const Form = (formProps: FormProps) => {
         <>
             <View
                 style= {{
-                    flex: 3
+                    width: '100%'
                 }}
             >
                 {formProps.fields.map((field: Field) =>
@@ -41,15 +48,15 @@ export const Form = (formProps: FormProps) => {
                         ref={(input: TextInput) => {
                             inputs.current[formProps.fields.indexOf(field)] = input
                         }}
-                        onSubmitEditing = {() => {focusNextField(formProps.fields.indexOf(field))}}
-                        blurOnSubmit = {defineBlurSubmit(formProps.fields.indexOf(field))}
+                        onSubmitEditing = {() => {focusNextField(field)}}
+                        blurOnSubmit = {defineBlurSubmit(field)}
+                        returnKeyType={defineReturnType(field)}
                         style={{ marginBottom: 20 }}
                         mode={formProps.inputMode || 'flat'}
                         placeholder={field.placeholder || undefined}
                         label={field.label}
                         defaultValue={field.recoveredValue || undefined}
                         onChangeText={(text) => setFormData({...formData, [field.name]: text})}
-                        returnKeyType={defineReturnType(formProps.fields.indexOf(field))}
                         keyboardType={ field.keyboardType || undefined }
                         secureTextEntry = { field.hideContent || undefined }
                     />
@@ -60,9 +67,11 @@ export const Form = (formProps: FormProps) => {
                     onPress={handleSubmit}
                 >
                     {formProps.actionButtonText}
-                </Button>       
+                </Button> 
+
+                {children}
+                
             </View>
-            
         </>
     )
 

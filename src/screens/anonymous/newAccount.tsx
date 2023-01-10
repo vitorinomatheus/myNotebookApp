@@ -1,37 +1,48 @@
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Background } from '../../components/Background';
 import { Form } from '../../components/Form';
 import { Header } from '../../components/Header';
 import { Field, FormProps } from '../../types';
 
-export const NewAccount = () => {
+export const NewAccount = ({ navigation }: any) => {
+
+    const goToLoginScreen = () => {
+        navigation.navigate('login')
+    }
+
     return (
         <>
-        <Background>
+            <Background>
+                <Header>
+                    Create new account
+                </Header>
 
-            <Header>
-                Criar nova conta
-            </Header>
-
-        </Background>
-
-        <Form {...formProps} />            
+                <Form {...formProps}>  
+                    <Text style={{ textAlign: 'center' }}>
+                        Already have an account? 
+                        <Text 
+                            style={{ color: 'blue' }}
+                            onPress={() => goToLoginScreen()}
+                            > Login</Text>
+                    </Text> 
+                </Form>  
+            </Background>     
         </>
     )
 }
 
-const handleSubmit = () => {
-    alert('hello')
+const handleSubmit = (formData: any) => {
+    console.log(formData)
 }
 
 const fields: Array<Field> = [
     {
         name: "name",
-        label: "Nome"
+        label: "Full Name"
     },
     {
         name: "login",
-        label: "Login"
+        label: "Login",
     },
     {
         name: "email",
@@ -40,18 +51,18 @@ const fields: Array<Field> = [
     },
     {
         name: "password",
-        label: "Senha",
+        label: "Password",
         hideContent: true
     },
     {
         name: "passowordConfirm",
-        label: "Confirmar Senha",
+        label: "Confirm Password",
         hideContent: true
     }
 ]
 
 const formProps: FormProps = {
     fields: fields,
-    submitMethod: () => {handleSubmit},
-    actionButtonText: 'Criar Conta'
+    submitMethod: (formData) => handleSubmit(formData),
+    actionButtonText: 'Create account'
 }
