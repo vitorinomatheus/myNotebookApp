@@ -3,6 +3,7 @@ import { NewAccount } from './src/screens/anonymous/newAccount';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login } from './src/screens/anonymous/login';
+import { ForgotPassword } from './src/screens/anonymous/forgotPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,11 @@ export default function App() {
             <Stack.Screen 
               name="login" 
               component={ Login } 
+            />
+
+            <Stack.Screen 
+              name="forgotPassword"
+              component={ ForgotPassword }
             />
           </Stack.Navigator>
         </View>

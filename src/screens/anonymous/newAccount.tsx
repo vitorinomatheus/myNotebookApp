@@ -23,7 +23,8 @@ export const NewAccount = ({ navigation }: any) => {
                         <Text 
                             style={{ color: 'blue' }}
                             onPress={() => goToLoginScreen()}
-                            > Login</Text>
+                            > Login
+                        </Text>
                     </Text> 
                 </Form>  
             </Background>     
@@ -38,26 +39,32 @@ const handleSubmit = (formData: any) => {
 const fields: Array<Field> = [
     {
         name: "name",
-        label: "Full Name"
+        label: "Full Name",
+        required: true
     },
     {
         name: "login",
         label: "Login",
+        required: true
     },
     {
         name: "email",
         label: "E-mail",
-        keyboardType: 'email-address'
+        keyboardType: 'email-address',
+        required: true,
+        validationRegex: /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i
     },
     {
         name: "password",
         label: "Password",
-        hideContent: true
+        hideContent: true,
+        required: true
     },
     {
         name: "passowordConfirm",
         label: "Confirm Password",
-        hideContent: true
+        hideContent: true,
+        required: true
     }
 ]
 

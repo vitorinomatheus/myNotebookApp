@@ -14,10 +14,12 @@ export type Field = {
     hideContent?: boolean
     keyboardType?: KeyboardTypeOptions,
     placeholder?: string,
-    recoveredValue?: string
+    recoveredValue?: string,
+    required?: boolean,
+    validationRegex?: RegExp
 }
 
-// Button Types
+// Button Types'
 export type ButtonProps = {
     color: string,
     labelText: string,

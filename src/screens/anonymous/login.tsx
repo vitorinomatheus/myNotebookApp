@@ -6,8 +6,8 @@ import { Field, FormProps } from "../../types"
 
 export const Login = ({ navigation }: any) => {
 
-    const goToNewAccountScreen = () => {
-        navigation.navigate('newAccount')
+    const navigateToScreen = (screen: string) => {
+        navigation.navigate(screen)
     }
 
     return (
@@ -18,18 +18,21 @@ export const Login = ({ navigation }: any) => {
 
             <Form {...formProps}>
 
-                <Text style={{ textAlign: 'center' }}>
+                <Text style={{ textAlign: 'center', marginBottom: 5 }}>
                     Don't have an account? 
                     <Text
                         style={{ color: 'blue' }}
-                        onPress={() => goToNewAccountScreen()}
-                        > Create new Account</Text>
+                        onPress={() => navigateToScreen('newAccount')}
+                        > Create new Account
+                    </Text>
                 </Text>
-
+                <Text 
+                    style={{ textAlign: "center", color: 'blue' }}
+                    onPress={() => navigateToScreen('forgotPassword')}>
+                    Forgot password
+                </Text>
             </Form>
-
-        </Background>
-        
+        </Background>      
     )
 }
 
