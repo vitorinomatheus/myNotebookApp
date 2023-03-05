@@ -15,13 +15,15 @@ export type Field = {
     keyboardType?: KeyboardTypeOptions,
     placeholder?: string,
     recoveredValue?: string,
+    isConfirmField?: boolean,
+    fieldToConfirm?: string,
     required?: boolean,
-    validationRegex?: RegExp
+    validationRegex?: RegExp,
+    customValidationMessage?: string
 }
 
-// Button Types'
+// Button Types
 export type ButtonProps = {
     color: string,
     labelText: string,
-
 }

@@ -2,6 +2,8 @@ import { Text, View } from 'react-native';
 import { Background } from '../../components/Background';
 import { Form } from '../../components/Form';
 import { Header } from '../../components/Header';
+import { CreateUserDto } from '../../services/api/dtos/createUser.dto';
+import { createUser } from '../../services/api/user';
 import { Field, FormProps } from '../../types';
 
 export const NewAccount = ({ navigation }: any) => {
@@ -32,8 +34,10 @@ export const NewAccount = ({ navigation }: any) => {
     )
 }
 
-const handleSubmit = (formData: any) => {
-    console.log(formData)
+const handleSubmit = (formData: CreateUserDto) => {
+    createUser(formData)
+        .then(createdUser => console.log(createdUser))
+        .catch(error => console.log(error))
 }
 
 const fields: Array<Field> = [
@@ -52,7 +56,7 @@ const fields: Array<Field> = [
         label: "E-mail",
         keyboardType: 'email-address',
         required: true,
-        validationRegex: /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i
+        // validationRegex: /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i
     },
     {
         name: "password",
@@ -61,10 +65,13 @@ const fields: Array<Field> = [
         required: true
     },
     {
-        name: "passowordConfirm",
+        name: "confirmPassword",
         label: "Confirm Password",
         hideContent: true,
-        required: true
+        // required: true,
+        customValidationMessage: 'Senhas são diferentes',
+        isConfirmField: true,
+        fieldToConfirm: 'password'
     }
 ]
 

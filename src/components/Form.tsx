@@ -10,13 +10,13 @@ type ChildProp = {
 
 export const Form = ({children, ...formProps}: FormProps & ChildProp) => {
 
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState<{[key: string]: string}>({});
     const [errors, setErrors] = useState<{[key: string]: string}>({});
 
     const inputs = useRef<TextInput[]>([]);
 
     const handleSubmit = () => {
-        const validationErrors = validateForm(formProps.fields, formData);
+        const validationErrors = validateForm(formData);
         setErrors(validationErrors);
         if (Object.keys(validationErrors).length > 0) {
             return;
@@ -40,18 +40,28 @@ export const Form = ({children, ...formProps}: FormProps & ChildProp) => {
         return fieldIndex == (formProps.fields.length - 1);
     }
 
-    const validateForm = (fields: Array<Field>, formData: {[key: string]: string}) : 
+    const validateForm = (formData: {[key: string]: string}) : 
     {[key: string]: string} => {
         let errors: {[key: string]: string} = {};
-        fields.forEach((field) => {
+        formProps.fields.forEach((field) => {
             if(field.required && !formData[field.name]) {
                 errors[field.name] = 'This field is required';
             }
             if(field.validationRegex && !field.validationRegex.test(formData[field.name])) {
-                errors[field.name] = 'This field is not valid';
+                if(field.customValidationMessage) {
+                    errors[field.name] = field.customValidationMessage
+                } else {
+                    errors[field.name] = 'This field is not valid';
+                }
             }
         });
         return errors;
+    }
+
+    const handleConfirmField = (valueToConfirm: string, field: Field) : void => {
+        if(valueToConfirm != formData[field.fieldToConfirm!]) {
+            errors[field.name] = field.customValidationMessage!;
+        }
     }
 
     return (
@@ -76,7 +86,12 @@ export const Form = ({children, ...formProps}: FormProps & ChildProp) => {
                         placeholder={field.placeholder || undefined}
                         label={field.label}
                         defaultValue={field.recoveredValue || undefined}
-                        onChangeText={(text) => setFormData({...formData, [field.name]: text})}
+                        onChangeText={(text) => {
+                            if(!field.isConfirmField) {
+                                setFormData({...formData, [field.name]: text})  
+                            } else {
+                                handleConfirmField(text, field);
+                            }}}
                         keyboardType={ field.keyboardType || undefined }
                         secureTextEntry = { field.hideContent || undefined }
                         error={ errors[field.name] ? true : false }
